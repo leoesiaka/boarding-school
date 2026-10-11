@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#101d2a" />
+  <title>Nigeria Boarding School Simulation — Unity Heights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+</head>
+<body>
+  <main id="game-shell">
+    <div id="game-canvas-wrap"><canvas id="game-canvas" aria-label="3D boarding school game world"></canvas></div>
+
+    <section id="start-screen" class="screen-layer">
+      <div class="start-backdrop"></div>
+      <div class="start-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> AN INTERACTIVE NIGERIAN SCHOOL-LIFE GAME</div>
+        <div class="start-mark">UH<span>.</span></div>
+        <p class="school-kicker">UNITY HEIGHTS · BOARDING SCHOOL</p>
+        <h1>One campus.<br><em>A thousand stories.</em></h1>
+        <p class="start-copy">Make friends. Survive prep. Find your people. Your first term starts now.</p>
+        <div class="start-rule"><span></span><small>TERM 1 · WEEK 1</small><span></span></div>
+        <div class="character-setup">
+          <label>YOUR NAME<input id="player-name-input" maxlength="20" value="Chinedu" autocomplete="off" /></label>
+          <label>COMPLEXION<select id="skin-select"><option value="deep">Deep brown</option><option value="brown">Warm brown</option><option value="medium">Medium brown</option><option value="light">Light brown</option></select></label>
+          <label>HAIRSTYLE<select id="hair-select"><option value="low">Low cut</option><option value="fade">Fade</option><option value="curly">Short curls</option><option value="twists">Short twists</option><option value="afro">Afro</option><option value="cornrows">Cornrows</option><option value="braids">Braids</option><option value="puffs">Afro puffs</option><option value="bun">Bun</option></select></label>
+          <label>YOU ARE<select id="gender-select"><option value="m">Boy</option><option value="f">Girl</option></select></label>
+        </div>
+        <div class="start-actions"><button id="new-game-btn" class="primary-btn">START YOUR TERM <span>↗</span></button><button id="continue-btn" class="quiet-btn">CONTINUE SAVE</button></div>
+        <div class="start-foot"><span>MADE FOR THE MEMORIES</span><span>WASD TO MOVE · E TO INTERACT</span></div>
+      </div>
+      <div class="start-side-note"><span class="side-line"></span><span>PORT HARCOURT, NIGERIA</span><span class="side-line"></span></div>
+    </section>
+
+    <section id="hud" class="hidden">
+      <header class="hud-top">
+        <div class="brand-lockup"><div class="crest">UH</div><div><strong>UNITY HEIGHTS</strong><small>BOARDING SCHOOL</small></div></div>
+        <div class="location-chip"><span class="location-pulse"></span><span id="location-name">Main Courtyard</span></div>
+        <div class="time-card"><div class="sun-icon" id="weather-icon">☀</div><div><strong id="clock-label">06:30 AM</strong><small id="day-label">MONDAY · DAY 1</small></div></div>
+        <button class="aerial-toggle" id="aerial-btn" title="Switch to 3D campus map">3D CAMPUS ↗</button><button class="icon-button" id="pause-btn" title="Pause / controls">Ⅱ</button>
+      </header>
+
+      <div id="mobile-topbar" class="mobile-topbar">
+        <div class="mobile-resource-row">
+          <div class="resource-pill"><span>💵</span><strong id="mobile-cash">₦23,700</strong></div>
+          <div class="resource-pill"><span>📚</span><strong id="mobile-xp">LVL 1</strong></div>
+          <div class="resource-pill"><span>⚡</span><strong id="mobile-energy">88%</strong></div>
+          <button id="mobile-aerial-btn" class="glass-pill" aria-label="Toggle aerial campus map">⌖</button>
+        </div>
+        <div class="mobile-notice-row">
+          <button id="roommate-nudge" class="mission-pill"><span class="mission-icon">✦</span><span><strong>Meet your roommate</strong><small>Blue House · First day</small></span><b>›</b></button>
+          <div class="class-pill"><span class="class-icon">🎓</span><span><strong id="mobile-next-title">Assembly begins soon</strong><small id="mobile-next-sub">Check your timetable</small></span></div>
+        </div>
+      </div>
+
+      <div class="loc-pill" id="loc-pill"><span>📍</span><strong id="mobile-location">Main Campus</strong></div>
+
+      <aside class="left-panel">
+        <div class="panel-label">STUDENT PROFILE <span class="live-dot"></span></div>
+        <div class="student-mini"><div id="profile-portrait" class="portrait">C</div><div><strong id="profile-name">Chinedu</strong><small>JSS 3 · BLUE HOUSE</small></div></div>
+        <div class="level-line"><span>TERM PROGRESS</span><b id="level-label">LEVEL 1</b></div><div class="xp-track"><span id="xp-fill"></span></div>
+        <div class="stat-row"><div class="stat-icon energy">ϟ</div><div class="stat-detail"><span>ENERGY</span><div class="stat-track"><i id="energy-fill"></i></div></div><b id="energy-label">88</b></div>
+        <div class="stat-row"><div class="stat-icon brain">✳</div><div class="stat-detail"><span>KNOWLEDGE</span><div class="stat-track"><i id="knowledge-fill"></i></div></div><b id="knowledge-label">12</b></div>
+        <div class="stat-row"><div class="stat-icon heart">♥</div><div class="stat-detail"><span>REPUTATION</span><div class="stat-track"><i id="reputation-fill"></i></div></div><b id="reputation-label">15</b></div>
+        <div class="stat-row"><div class="stat-icon conduct">★</div><div class="stat-detail"><span>CONDUCT</span><div class="stat-track"><i id="conduct-fill"></i></div></div><b id="conduct-label">80</b></div>
+        <div class="panel-divider"></div>
+        <div class="panel-label">YOUR NEXT THING</div>
+        <div class="next-event"><div class="event-time" id="event-time">07:00</div><div><strong id="event-name">Breakfast</strong><small id="event-place">Dining Hall</small></div></div>
+        <button class="side-action" id="timetable-btn"><span>▦</span> View timetable <kbd>T</kbd></button>
+        <button class="side-action" id="journal-btn"><span>✧</span> School journal <kbd>J</kbd></button>
+      </aside>
+
+      <aside class="right-panel">
+        <div class="map-heading"><div><small>CAMPUS GUIDE</small><strong>Know your way.</strong></div><span class="map-compass">N↑</span></div>
+        <canvas id="minimap" width="260" height="220"></canvas>
+        <div class="map-key"><span><i class="key-player"></i>You</span><span><i class="key-building"></i>Buildings</span></div>
+        <div class="panel-divider"></div>
+        <div class="panel-label">FIRST-TERM CHECKLIST <b id="quest-count">0/4</b></div>
+        <div id="quest-list" class="quest-list"></div>
+        <button id="map-btn" class="map-expand">OPEN CAMPUS MAP <span>↗</span></button>
+      </aside>
+
+      <div id="interact-hint" class="interact-hint hidden"><kbd>E</kbd><span id="interact-text">Talk to Ada</span><small id="interact-subtext">STUDENT</small></div>
+      <div id="controls-hint" class="controls-hint"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> MOVE</span><span><kbd>DRAG</kbd> LOOK AROUND</span><span><kbd>E</kbd> INTERACT</span><span><kbd>SHIFT</kbd> RUN</span></div>
+      <div id="toast" class="toast hidden"></div>
+      <div id="crosshair" class="crosshair"><span></span><span></span></div>
+      <div id="mobile-controls" class="mobile-controls" aria-label="Touch controls">
+        <div class="joystick-wrap"><div class="joystick-label">DRAG TO WALK</div><div id="joystick-base" class="joystick-base"><div id="joystick-knob" class="joystick-knob"></div></div></div>
+        <div class="mobile-action-stack">
+          <button id="mobile-sprint" class="touch-action sprint-action"><span>↗</span><small>RUN</small></button>
+          <button id="mobile-interact" class="touch-action interact-action"><span>◎</span><small>INTERACT</small></button>
+          <button id="mobile-directory" class="touch-action map-action"><span>⌖</span><small>MAP</small></button>
+          <button id="mobile-timetable" class="touch-action timetable-action"><span>▦</span><small>DAY</small></button>
+          <button id="mobile-games" class="touch-action games-action"><span>⚽</span><small>GAMES</small></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="dialogue-panel" class="modal-panel hidden">
+      <div class="modal-overline"><span class="live-dot"></span> CONVERSATION <button class="modal-x" data-close="dialogue-panel">×</button></div>
+      <div class="dialogue-person-row"><div class="dialogue-avatar" id="dialogue-avatar">A</div><div><small id="dialogue-role">STUDENT · BLUE HOUSE</small><h2 id="dialogue-name">Adaeze</h2></div><div class="friendship"><small>RAPPORT</small><strong id="rapport-label">15 / 100</strong><div class="rapport-track"><i id="rapport-fill"></i></div></div></div>
+      <div class="dialogue-bubble"><span id="dialogue-speaker">Adaeze</span><p id="dialogue-text">Hey! You must be new around here.</p></div>
+      <div id="dialogue-options" class="dialogue-options"></div>
+      <form id="talk-form" class="talk-form"><input id="talk-input" maxlength="180" autocomplete="off" placeholder="Say something… (try asking about classes)" /><button type="submit" aria-label="Send message">➤</button></form>
+      <div class="dialogue-foot"><span>YOUR WORDS SHAPE YOUR SCHOOL LIFE</span><button id="end-talk-btn">END CONVERSATION ↗</button></div>
+    </section>
+
+    <section id="timetable-panel" class="modal-panel narrow-panel hidden">
+      <div class="modal-overline">YOUR WEEK AT UNITY HEIGHTS <button class="modal-x" data-close="timetable-panel">×</button></div>
+      <h2>School timetable<span class="gold-dot">.</span></h2><p class="panel-intro">The bell does not wait for anybody. Be where you should be.</p>
+      <div id="timetable-content" class="timetable-content"></div>
+      <div class="modal-bottom-note">HOUSE RULE: BE EARLY. BE KIND. DO YOUR PREP.</div>
+    </section>
+
+    <section id="journal-panel" class="modal-panel narrow-panel hidden">
+      <div class="modal-overline">NOTES FROM THE TERM <button class="modal-x" data-close="journal-panel">×</button></div>
+      <h2>School journal<span class="gold-dot">.</span></h2><p class="panel-intro">Little moments become your story.</p>
+      <div id="journal-content" class="journal-content"></div>
+      <div class="journal-note">Your progress saves in this browser.</div>
+    </section>
+
+    <section id="map-panel" class="modal-panel map-modal hidden">
+      <div class="modal-overline">UNITY HEIGHTS · CAMPUS DIRECTORY <button class="modal-x" data-close="map-panel">×</button></div>
+      <h2>Find your next stop<span class="gold-dot">.</span></h2>
+      <p class="panel-intro">Explore the campus and discover what happens behind every door.</p>
+      <canvas id="big-map" width="800" height="580"></canvas><div id="map-directory" class="map-directory"></div>
+    </section>
+
+    <section id="pause-panel" class="screen-layer modal-screen hidden">
+      <div class="pause-card"><div class="crest large-crest">UH</div><div class="eyebrow">TAKE A BREATHER</div><h2>School can wait<br><em>for a minute.</em></h2><p>You're safe here. The bell is paused too.</p><button id="resume-btn" class="primary-btn">BACK TO SCHOOL <span>↗</span></button><button id="save-quit-btn" class="quiet-btn">SAVE & RETURN TO TITLE</button><div class="pause-controls">WASD move · Drag the screen to look · E interact · T timetable · J journal · M map · Esc pause</div></div>
+    </section>
+
+    <section id="games-panel" class="modal-panel games-modal hidden">
+      <div class="modal-overline"><span class="live-dot"></span> UNITY HEIGHTS · INTER-HOUSE RECREATION <button class="modal-x" data-close="games-panel">×</button></div>
+      <div id="games-hub">
+        <h2>Who’s up for a game<span class="gold-dot">?</span></h2>
+        <p class="panel-intro">Challenge your schoolmates after class. Win house points, make friends and spend some of that break-time energy.</p>
+        <div class="opponent-strip"><div class="opponent-avatars"><span> T </span><span> A </span><span> E </span></div><div><strong>Schoolyard crew is around</strong><small>Tunde · Adaeze · Emeka · Zainab</small></div><span class="online-dot"></span></div>
+        <div class="game-card-grid">
+          <button class="game-card" data-game="football"><span class="game-emoji">⚽</span><span class="game-card-copy"><strong>Penalty shoot-out</strong><small>Pick a corner. Beat the keeper.</small><em>5 shots · Quick match</em></span><b>↗</b></button>
+          <button class="game-card" data-game="ayo"><span class="game-emoji">🪵</span><span class="game-card-copy"><strong>Ayo Olopon</strong><small>Think ahead and capture seeds.</small><em>Strategy · Turn-based</em></span><b>↗</b></button>
+          <button class="game-card" data-game="suwe"><span class="game-emoji">🟨</span><span class="game-card-copy"><strong>Suwe</strong><small>Hop the chalk course with care.</small><em>Footwork · 3 lives</em></span><b>↗</b></button>
+          <button class="game-card" data-game="tenten"><span class="game-emoji">👏</span><span class="game-card-copy"><strong>Ten-ten rhythm</strong><small>Follow the clap-and-step calls.</small><em>Rhythm · Beat the crew</em></span><b>↗</b></button>
+        </div>
+        <div class="games-tip"><span>✦</span> These are friendly matches against schoolmate characters in this build. Your wins affect your reputation and friendships.</div>
+      </div>
+      <div id="game-play-view" class="game-play-view hidden">
+        <div class="game-play-heading"><button id="games-back" class="back-to-games">← ALL GAMES</button><div class="opponent-pill"><span class="opponent-face" id="game-opponent-face">T</span><span><small>YOUR RIVAL</small><strong id="game-opponent-name">Tunde</strong></span></div></div>
+        <h2 id="game-title">Penalty shoot-out<span class="gold-dot">.</span></h2>
+        <p id="game-instructions" class="panel-intro">Choose where to shoot. Can you outsmart the keeper?</p>
+        <div id="game-scoreboard" class="game-scoreboard"><div><small>YOU</small><strong id="game-player-score">0</strong></div><span>VS</span><div><small id="game-rival-label">TUNDE</small><strong id="game-rival-score">0</strong></div></div>
+        <div id="ayo-board" class="ayo-board hidden"></div>
+        <div id="suwe-board" class="suwe-board hidden"></div>
+        <div id="tenten-board" class="tenten-board hidden"></div>
+        <div id="penalty-board" class="penalty-board hidden"></div>
+        <div id="game-feedback" class="game-feedback" aria-live="polite">The game is about to start.</div>
+        <div id="game-finish-actions" class="game-finish-actions hidden"><button id="game-rematch" class="primary-btn">PLAY AGAIN <span>↻</span></button><button id="game-hub-return" class="quiet-btn">CHOOSE ANOTHER GAME</button></div>
+      </div>
+    </section>
+
+    <section id="sleep-panel" class="modal-panel sleep-panel hidden">
+      <div class="modal-overline">BLUE HOUSE HOSTEL <button class="modal-x" data-close="sleep-panel">×</button></div>
+      <h2>Lights out<span class="gold-dot">.</span></h2><p class="panel-intro">The hostel settles. Someone is still whispering on the bunk across from yours.</p>
+      <div class="sleep-scene"><div class="moon">☾</div><div><small>REST UNTIL</small><strong>06:00 AM</strong><span>New day · Fresh energy · New chances</span></div></div>
+      <button id="sleep-confirm-btn" class="primary-btn full-btn">TURN IN FOR THE NIGHT <span>↗</span></button>
+    </section>
+
+    <div id="action-notice" class="action-notice hidden"><span class="notice-icon">✦</span><div><strong id="notice-title">Lesson complete</strong><span id="notice-body">Knowledge +8 · Energy -5</span></div><button id="notice-close">×</button></div>
+    <div id="loading-cover" class="loading-cover"><div class="loader-crest">UH</div><div class="loading-track"><span></span></div><p>OPENING THE SCHOOL GATE…</p></div>
+  </main>
+  <script src="characters.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
